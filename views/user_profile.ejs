@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+  </head>
+  <body>
+    <h1>User Profile</h1>
+    <strong>Name:</strong> <%= user.name %> <br /><br />
+    <strong>Email:</strong> <%= user.email %><br /><br />
+    <strong>Contact:</strong> <%= user.contact %><br /><br />
+
+    <strong>Uploaded Files:</strong>
+    <ul>
+      <% user.files.forEach(file => { %>
+      <li>
+        <a href="/user/files/<%= file %>">
+          <img src="/upload/<%= file %>" alt="Uploaded file"
+            style="width:100px;height:100px;" />
+        </a>
+        <br />
+        <a href="/user/download/<%= file %>" download="<%= file %>">
+          <button>Download</button>
+        </a>
+      </li>
+      <% }); %>
+    </ul>
+    <form action="/user/logout" method="GET">
+      <button type="submit">Logout</button>
+    </form>
+  </body>
+</html>

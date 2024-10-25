@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Edit Student</title>
+    </head>
+
+    <body align="center">
+        <h1>Edit Student</h1>
+        <form id="editStudentForm" align="center">
+            <label>Name: <input type="text" id="name" required></label><br><br>
+            <label>Email: <input type="email" id="email"
+                    required></label><br><br>
+            <label>Password: <input type="text" id="password"
+                    required></label><br><br>
+            <label>Age: <input type="number" id="age" required></label><br><br>
+            <label>Sem: <input type="text" id="sem" required></label><br><br>
+            <label>Dob: <input type="date" id="dob" required></label><br><br>
+
+            <button type="submit">Edit Student</button>
+        </form>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+        $(document).ready(function () {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                window.location.href = "index.html";
+            }
+            const studentId = window.location.search.split('=')[1];
+
+            $.ajax({
+                url: `http://localhost:8000/studentsJquery/${studentId}`,
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                success: function (student) {
+                    const formattedDate = new Date(student.dob).toISOString().split('T')[0];
+
+                    $("#name").val(student.name);
+                    $("#email").val(student.email);
+                    $("#password").val(student.password);
+                    $("#age").val(student.age);
+                    $("#sem").val(student.sem);
+                    $("#dob").val(formattedDate);
+
+                },
+                error: function (err) {
+                    console.error("Error fetching student data", err);
+                },
+            });
+
+            $("#editStudentForm").submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: `http://localhost:8000/studentsJquery/edit/${studentId}`,
+                    method: "PUT",
+                    data: {
+                        name: $("#name").val(),
+                        email: $("email").val(),
+                        password: $("#password").val(),
+                        age: $("#age").val(),
+                        gender: $("#gender").val(),
+                        sem: $("#sem").val(),
+                        div: $("#div").val(),
+                        dob: $("#dob").val(),
+
+                    },
+                    success: function () {
+                        alert("Student updated successfully");
+                        window.location.href = "studentList.html";
+                    },
+                    error: function (err) {
+                        console.error("Error updating student", err);
+                    },
+                });
+            });
+        });
+    </script>
+    </body>
+
+</html>

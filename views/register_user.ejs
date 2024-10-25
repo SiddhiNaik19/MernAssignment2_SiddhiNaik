@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register User</title>
+  </head>
+  <body>
+    <h3>Register User</h3>
+    <form action="/user/adduser" method="post" enctype="multipart/form-data">
+      <div>
+        Name
+        <input type="text" id="name" name="name" required>
+      </div><br />
+      <div>
+        Email
+        <input type="email" id="email" name="email" required>
+      </div><br />
+      <div>
+        Password
+        <input type="password" id="password" name="password" required>
+      </div><br />
+      <div>
+        Contact
+        <input type="text" id="contact" name="contact" required>
+      </div><br />
+      <div>
+        Upload Files for profile
+        <input type="file" id="files" name="files" multiple required>
+      </div><br />
+      <button type="submit">Register</button>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Add Student</title>
+    </head>
+
+    <body align="center">
+        <h1>Add New Student</h1>
+        <form id="addStudentForm" align="center">
+            <label>Name: <input type="text" id="name" required></label><br><br>
+            <label>Email: <input type="email" id="email"
+                    required></label><br><br>
+            <label>Password: <input type="password" id="password"
+                    required></label><br><br>
+            <label>Age: <input type="number" id="age" required></label><br><br>
+            <label>Sem: <input type="text" id="sem" required></label><br><br>
+            <label>Dob: <input type="date" id="dob" required></label><br><br>
+
+            <button type="submit">Add Student</button>
+        </form>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+        $(document).ready(function () {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                window.location.href = "index.html";
+            }
+            $("#addStudentForm").submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "http://localhost:8000/studentsJquery",
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    data: {
+                        name: $("#name").val(),
+                        email: $("#email").val(),
+                        password: $("#password").val(),
+                        age: $("#age").val(),
+                        sem: $("#sem").val(),
+                        dob: $("#dob").val(),
+                    },
+                    success: function () {
+                        alert("Student added successfully");
+                        window.location.href = "studentList.html";
+                    },
+                    error: function (err) {
+                        console.error("Error adding student", err);
+                    },
+                });
+            });
+        })
+    </script>
+    </body>
+
+</html>

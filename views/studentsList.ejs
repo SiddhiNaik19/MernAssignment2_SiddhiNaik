@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Students</title>
+    </head>
+
+    <body align="center">
+        <h2>Student List</h2>
+        <a href="/students/addStudentForm"> Add Student</a> <br>
+
+        <table border="1" align="center" style="width: 70%; margin:auto">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Semester</th>
+                    <th>Date of Birth</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% students.forEach(student=> { %>
+                <tr>
+                    <td>
+                        <%= student.name %>
+                    </td>
+                    <td>
+                        <%= student.age %>
+                    </td>
+                    <td>
+                        <%= student.sem %>
+                    </td>
+                    <td>
+                        <%= student.dob.toDateString() %>
+                    </td>
+                    <td>
+                        <a href="/students/editForm/<%= student._id %>">Edit</a>
+                    </td>
+                    <td>
+                        <a href="/students/delete/<%= student._id%>"> Delete</a>
+                    </td>
+                    <% })%>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+
+</html>

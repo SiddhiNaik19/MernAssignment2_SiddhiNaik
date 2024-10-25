@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Student Login</title>
+    </head>
+
+    <body align="center">
+        <h1>Login</h1>
+        <form id="loginForm" align="center">
+            <label>Email: <input type="email" id="email"
+                    required></label><br><br />
+            <label>Password: <input type="password" id="password"
+                    required></label><br>
+            <button type="submit">Login</button>
+        </form>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+        $("#loginForm").submit(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: "http://localhost:8000/loginStudent",
+                method: "POST",
+                data: {
+                    email: $("#email").val(),
+                    password: $("#password").val()
+                },
+                success: function (token) {
+                    alert("Login Successful!");
+                    console.log("Token:", token);
+                    localStorage.setItem("authToken", token);
+                    window.location.href = "studentList.html";
+                },
+                error: function (err) {
+                    console.error("Error logging in", err);
+                    alert("Login failed! Please check your credentials.");
+                },
+            });
+        });
+    </script>
+    </body>
+
+</html>

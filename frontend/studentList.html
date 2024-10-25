@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Students</title>
+    </head>
+
+    <body align="center">
+        <h1>Student List</h1>
+        <input type="button" id="addStudent" value="Add Student" align="right">
+        <br><br>
+
+        <table id="studentTable" border="1" align="center" width="90%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Age</th>
+                    <th>Semester</th>
+                    <th>DOB</th>
+                    <th>Actions</th>
+
+                </tr>
+            </thead>
+            <tbody id="data"></tbody>
+        </table>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+        $(document).ready(function () {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                window.location.href = "index.html";
+            }
+            $.ajax({
+                url: "http://localhost:8000/studentsJquery",
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                success: function (students) {
+                    students.forEach((student) => {
+                        const dob = new Date(student.dob);
+                        const formattedDOB = `${String(dob.getDate()).padStart(2, '0')}-${String(dob.getMonth() + 1).padStart(2, '0')}-${dob.getFullYear()}`;
+
+                        $("#data").append(`
+                            <tr data-id="${student._id}">
+                                <td>${student.name}</td>
+                                <td>${student.email}</td>
+                                  <td>${student.age}</td>
+                                    <td>${student.sem}</td>
+                                      <td>${formattedDOB}</td>
+                                <td>
+                                    <button class="editBtn" data-id=${student._id}>Edit</button>
+                                    <button class="deleteBtn" data-id=${student._id}>Delete</button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                },
+                error: function (err) {
+                    console.error("Error fetching students", err);
+                },
+            });
+
+            $("#addStudent").on('click', function (event) {
+                event.preventDefault();
+                window.location.href = "addStudent.html"
+            });
+
+
+            $("#data").on("click", ".deleteBtn", function () {
+                const studentId = $(this).attr('data-id');
+                $.ajax({
+                    url: `http://localhost:8000/studentsJquery/delete/${studentId}`,
+                    method: "DELETE",
+                    success: function () {
+                        alert("Student deleted successfully");
+                        window.location.reload();
+                    },
+                    error: function (err) {
+                        console.error("Error deleting student", err);
+                    },
+                });
+            });
+
+            $("#data").on("click", ".editBtn", function () {
+                const studentId = $(this).attr('data-id');
+                window.location.href = `editStudent.html?id=${studentId}`;
+            });
+        });
+    </script>
+    </body>
+
+</html>
